@@ -4,11 +4,9 @@ inputs:
   artifactorySecret:
     required: true
     description: "The artifactory secret used to download internal packages"
-jobs:
-  laravel-tests:
-    runs-on: ubuntu-latest
+
+runs:
     steps:
-    
     #Checkout code
     - uses: actions/checkout@v2
     
