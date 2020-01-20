@@ -1,5 +1,9 @@
 name: Laravel Tests
 
+inputs:
+  artifactorySecret:
+    required: true
+    description: "The artifactory secret used to download internal packages"
 jobs:
   laravel-tests:
     runs-on: ubuntu-latest
@@ -15,9 +19,7 @@ jobs:
     # Set up artifactory access on composer
     - name: Configure artifactory access
       run: |
-        echo "{\"http-basic\":{\"artifactory.ops.neta.sh\":{\"username\":\"github-actions\",\"password\":\"${ARTIFACTORY_SECRET}\"}}}" > auth.json
-      env:
-        ARTIFACTORY_SECRET: ${{ secrets.ARTIFACTORY_SECRET }}
+        echo "{\"http-basic\":{\"artifactory.ops.neta.sh\":{\"username\":\"github-actions\",\"password\":\"${INPUT_ARTIFACTORYSECRET}\"}}}" > auth.json
 
     # Fetch all dependencies
     - name: Install Dependencies
