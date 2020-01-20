@@ -6,28 +6,27 @@ inputs:
     description: "The artifactory secret used to download internal packages"
 
 runs:
-    steps:
-    #Checkout code
-    - uses: actions/checkout@v2
-    
-    #Prepare laravel's .env file
-    - name: Copy .env
-      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+  #Checkout code
+  - uses: actions/checkout@v2
 
-    # Set up artifactory access on composer
-    - name: Configure artifactory access
-      run: |
-        echo "{\"http-basic\":{\"artifactory.ops.neta.sh\":{\"username\":\"github-actions\",\"password\":\"${INPUT_ARTIFACTORYSECRET}\"}}}" > auth.json
+  #Prepare laravel's .env file
+  - name: Copy .env
+    run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
-    # Fetch all dependencies
-    - name: Install Dependencies
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
-    
-    - name: Remove auth.json file
-      run: rm auth.json
-   
-    - name: Generate key
-      run: php artisan key:generate
+  # Set up artifactory access on composer
+  - name: Configure artifactory access
+    run: |
+      echo "{\"http-basic\":{\"artifactory.ops.neta.sh\":{\"username\":\"github-actions\",\"password\":\"${INPUT_ARTIFACTORYSECRET}\"}}}" > auth.json
 
-    - name: Execute tests (Unit and Feature tests) via PHPUnit
-      run: vendor/bin/phpunit
+  # Fetch all dependencies
+  - name: Install Dependencies
+    run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
+
+  - name: Remove auth.json file
+    run: rm auth.json
+
+  - name: Generate key
+    run: php artisan key:generate
+
+  - name: Execute tests (Unit and Feature tests) via PHPUnit
+    run: vendor/bin/phpunit
